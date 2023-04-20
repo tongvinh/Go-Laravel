@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/tongvinh/celeritas"
 	"log"
+	"myapp/data"
 	"myapp/handlers"
 	"os"
 )
@@ -32,6 +33,8 @@ func initApplication() *application {
 	}
 
 	app.App.Routes = app.routes()
+
+	app.Models = data.New(app.App.DB.Pool)
 
 	return app
 }
