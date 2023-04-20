@@ -21,3 +21,15 @@ github.com/tongvinh/celeritas/render/render.go:82.16,85.3 2 1
 github.com/tongvinh/celeritas/render/render.go:87.2,87.46 1 1
 github.com/tongvinh/celeritas/render/render.go:87.46,90.3 2 0
 github.com/tongvinh/celeritas/render/render.go:91.2,91.12 1 1
+github.com/tongvinh/celeritas/session/session.go:20.53,25.16 3 1
+github.com/tongvinh/celeritas/session/session.go:25.16,27.3 1 0
+github.com/tongvinh/celeritas/session/session.go:30.2,30.48 1 1
+github.com/tongvinh/celeritas/session/session.go:30.48,32.3 1 1
+github.com/tongvinh/celeritas/session/session.go:35.2,35.47 1 1
+github.com/tongvinh/celeritas/session/session.go:35.47,37.3 1 0
+github.com/tongvinh/celeritas/session/session.go:40.2,49.40 8 1
+github.com/tongvinh/celeritas/session/session.go:50.15,50.15 0 0
+github.com/tongvinh/celeritas/session/session.go:52.26,52.26 0 0
+github.com/tongvinh/celeritas/session/session.go:54.32,54.32 0 0
+github.com/tongvinh/celeritas/session/session.go:56.10,56.10 0 1
+github.com/tongvinh/celeritas/session/session.go:60.2,60.16 1 1
