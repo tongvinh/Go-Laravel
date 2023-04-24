@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
 )
 
 var (
@@ -223,12 +224,156 @@ func TestUser_Update(t *testing.T) {
 		t.Error("failed to update user:", err)
 	}
 
-	u, err := models.Users.Get(1)
+	u, err = models.Users.Get(1)
 	if err != nil {
 		t.Error("failed to get user: ", err)
 	}
 
 	if u.LastName != "Smith" {
 		t.Error("last name not updated in database")
+	}
+}
+
+func TestUser_PasswordMatches(t *testing.T) {
+	u, err := models.Users.Get(1)
+	if err != nil {
+		t.Error("failed to get user: ", err)
+	}
+
+	matches, err := u.PasswordMatches("password")
+	if err != nil {
+		t.Error("error checking match: ", err)
+	}
+
+	if !matches {
+		t.Error("password does match when it should")
+	}
+
+	matches, err = u.PasswordMatches("123")
+	if err != nil {
+		t.Error("error checking match: ", err)
+	}
+
+	if matches {
+		t.Error("password matches when it should not")
+	}
+}
+
+func TestUser_ResetPassword(t *testing.T) {
+	err := models.Users.ResetPassword(1, "new_password")
+	if err != nil {
+		t.Error("error resetting password: ", err)
+	}
+
+	err = models.Users.ResetPassword(1, "new_password")
+	if err != nil {
+		t.Error("did not get an error when trying to reset password for non-existent user: ", err)
+	}
+}
+
+func TestUser_Delete(t *testing.T) {
+	err := models.Users.Delete(1)
+	if err != nil {
+		t.Error("failed to delete user: ", err)
+	}
+
+	_, err = models.Users.Get(1)
+	if err == nil {
+		t.Error("retrieved user who was supposed to be deleted")
+	}
+}
+
+func TestToken_Table(t *testing.T) {
+	s := models.Tokens.Table()
+	if s != "tokens" {
+		t.Error("wrong table name returned for tokens")
+	}
+
+}
+
+func TestToken_GenerateToken(t *testing.T) {
+	id, err := models.Users.Insert(dummyuser)
+	if err != nil {
+		t.Error("error inserting user: ", err)
+	}
+
+	_, err = models.Tokens.GenerateToken(id, time.Hour*24*265)
+	if err != nil {
+		t.Error("error generating token: ", err)
+	}
+}
+
+func TestToken_Insert(t *testing.T) {
+	u, err := models.Users.GetByEmail(dummyuser.Email)
+	if err != nil {
+		t.Error("failed to get user")
+	}
+
+	token, err := models.Tokens.GenerateToken(u.ID, time.Hour*24*265)
+	if err != nil {
+		t.Error("error generating token: ", err)
+	}
+
+	err = models.Tokens.Insert(*token, *u)
+	if err != nil {
+		t.Error("error generating token", err)
+	}
+}
+
+func TestToken_GetUserForToken(t *testing.T) {
+	token := "abc"
+	_, err := models.Tokens.GetUserForToken(token)
+	if err == nil {
+		t.Error("error expected but not recieved when getting user with a bad token")
+	}
+
+	u, err := models.Users.GetByEmail(dummyuser.Email)
+	if err != nil {
+		t.Error("failed to get user")
+	}
+
+	_, err = models.Tokens.GetUserForToken(u.Token.PlainText)
+	if err != nil {
+		t.Error("failed to get user with valid token: ", err)
+	}
+}
+
+func TestToken_GetTokensForUser(t *testing.T) {
+	token, err := models.Tokens.GetTokensForUser(1)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(token) > 0 {
+		t.Error("tokens returned for non-existent user")
+	}
+}
+
+func TestToken_Get(t *testing.T) {
+	u, err := models.Users.GetByEmail(dummyuser.Email)
+	if err != nil {
+		t.Error("failed to get user")
+	}
+
+	_, err = models.Tokens.Get(u.Token.ID)
+	if err != nil {
+		t.Error("error getting token by id: ", err)
+	}
+}
+
+func TestToken_GetByToken(t *testing.T) {
+	u, err := models.Users.GetByEmail(dummyuser.Email)
+	if err != nil {
+		t.Error("failed to get user")
+	}
+
+	_, err = models.Tokens.GetByToken(u.Token.PlainText)
+	if err != nil {
+		t.Error("error getting token by token: ", err)
+	}
+
+	_, err = models.Tokens.GetByToken("123")
+	if err == nil {
+		t.Error("no error getting non-existing token by token: ", err)
 	}
 }
