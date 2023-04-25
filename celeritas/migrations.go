@@ -1,7 +1,11 @@
 package celeritas
 
 import (
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"log"
 )
 
@@ -12,7 +16,7 @@ func (c *Celeritas) MigrateUp(dsn string) error {
 	}
 	defer m.Close()
 
-	if err = m.Up(); err != nil {
+	if err := m.Up(); err != nil {
 		log.Println("Error running migrations: ", err)
 		return err
 	}
@@ -26,7 +30,7 @@ func (c *Celeritas) MigrateDownAll(dsn string) error {
 	}
 	defer m.Close()
 
-	if err = m.Down(); err != nil {
+	if err := m.Down(); err != nil {
 		return err
 	}
 	return nil
