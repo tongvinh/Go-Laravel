@@ -13,6 +13,7 @@ require (
 	github.com/alexedwards/scs/v2 v2.5.1 // indirect
 	github.com/ettle/strcase v0.1.1 // indirect
 	github.com/fatih/color v1.15.0 // indirect
+	github.com/gertd/go-pluralize v0.2.1 // indirect
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golang-migrate/migrate/v4 v4.15.2 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
