@@ -5,6 +5,7 @@ import (
 	"log"
 	"myapp/data"
 	"myapp/handlers"
+	"myapp/middleware"
 	"os"
 )
 
@@ -23,19 +24,25 @@ func initApplication() *application {
 
 	cel.AppName = "myapp"
 
+	myMiddleware := &middleware.Middleware{
+		App: cel,
+	}
+
 	myHandlers := &handlers.Handlers{
 		App: cel,
 	}
 
 	app := &application{
-		App:      cel,
-		Handlers: myHandlers,
+		App:        cel,
+		Handlers:   myHandlers,
+		Middleware: myMiddleware,
 	}
 
 	app.App.Routes = app.routes()
 
 	app.Models = data.New(app.App.DB.Pool)
 	myHandlers.Models = app.Models
+	app.Middleware.Models = app.Models
 
 	return app
 }
