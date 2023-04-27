@@ -4,7 +4,10 @@ go 1.20
 
 require (
 	github.com/CloudyKit/jet/v6 v6.2.0
+	github.com/alexedwards/scs/mysqlstore v0.0.0-20230327161757-10d4299e3b24
+	github.com/alexedwards/scs/postgresstore v0.0.0-20230327161757-10d4299e3b24
 	github.com/alexedwards/scs/v2 v2.5.1
+	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
 	github.com/ettle/strcase v0.1.1
 	github.com/fatih/color v1.15.0
 	github.com/gertd/go-pluralize v0.2.1
